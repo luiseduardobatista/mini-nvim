@@ -1,0 +1,55 @@
+local add, later = MiniDeps.add, MiniDeps.later
+
+-- Adicionando os plugins necessários
+add({
+    source = 'williamboman/mason.nvim'
+})
+
+add({
+    source = 'williamboman/mason-lspconfig.nvim', 
+    depends = {'williamboman/mason.nvim'}
+})
+
+add({
+    source = 'nvim-treesitter/nvim-treesitter'
+})
+
+add({
+    source = 'nvim-treesitter/nvim-treesitter-textobjects',
+    depends = {'nvim-treesitter/nvim-treesitter'}
+})
+
+-- Adicionando nvim-lspconfig, que é necessário para configurar o LSP
+add({
+    source = 'neovim/nvim-lspconfig'
+})
+
+later(function()
+    -- Configuração do Mason e Mason LSPConfig
+    require("mason").setup()
+    require("mason-lspconfig").setup({
+        ensure_installed = { "basedpyright", "ruff" }
+    })
+
+    local lspconfig = require("lspconfig")
+    lspconfig.basedpyright.setup({
+        on_attach = function(client, bufnr)
+        end
+    })
+
+    lspconfig.ruff.setup({
+        on_attach = function(client, bufnr)
+        end
+    })
+
+    -- Configuração do Treesitter
+    require("nvim-treesitter.configs").setup({
+        ensure_installed = { "python", "javascript", "lua" },
+        highlight = {
+            enable = true,
+        },
+        indent = {
+            enable = true,
+        },
+    })
+end)

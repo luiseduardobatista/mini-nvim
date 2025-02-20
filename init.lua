@@ -7,7 +7,9 @@ if not vim.loop.fs_stat(mini_path) then
 		"git",
 		"clone",
 		"--filter=blob:none",
-		"https://github.com/echasnovski/mini.nvim", mini_path, }
+		"https://github.com/echasnovski/mini.nvim",
+		mini_path,
+	}
 	vim.fn.system(clone_cmd)
 	vim.cmd("packadd mini.nvim | helptags ALL")
 	vim.cmd('echo "Installed `mini.nvim`" | redraw')
@@ -25,4 +27,4 @@ require("core.autocommands")
 require("plugins.mini")
 require("plugins.plugins")
 require("plugins.colorscheme")
-
+require("plugins.mappings")

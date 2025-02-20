@@ -19,11 +19,11 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 require("mini.deps").setup({ path = { package = path_package } })
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 require("core.options")
 require("core.keymaps")
 require("core.autocommands")
+
 require("plugins.mini")
 require("plugins.plugins")
 require("plugins.colorscheme")

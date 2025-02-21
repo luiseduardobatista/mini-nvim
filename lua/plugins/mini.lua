@@ -1,19 +1,19 @@
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
-require("mini.ai").setup()
-require("mini.surround").setup()
-require("mini.pairs").setup()
+later(function() require("mini.ai").setup() end)
+later(function() require("mini.surround").setup() end)
+later(function() require("mini.pairs").setup() end)
 require("mini.clue").setup()
 require("mini.icons").setup()
 require("mini.statusline").setup()
 require("mini.files").setup({ windows = { preview = true } })
-require("mini.move").setup()
+later(function() require("mini.move").setup() end)
 require("mini.completion").setup({ lsp_completion = {
 	source_func = "omnifunc",
 } })
 require("mini.misc").setup()
 require("mini.extra").setup()
-require("mini.comment").setup()
+later(function() require("mini.comment").setup() end)
 require("mini.visits").setup()
 require("mini.bufremove").setup()
 require("mini.hipatterns").setup()

@@ -12,26 +12,29 @@ now_if_args(function()
 
   local lspconfig = require("lspconfig")
 
-  lspconfig.lua_ls.setup({})
-  lspconfig.basedpyright.setup({})
-  lspconfig.ruff.setup({})
+  local function custom_on_attach(client, bufnr)
+    vim.bo[bufnr].omnifunc = "v:lua.MiniCompletion.completefunc_lsp"
+    local opts = { buffer = bufnr }
 
-  -- Usando LspAttach para definir keymaps e comportamento apenas quando um LSP estiver ativo
-  vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(event)
-      local opts = { buffer = event.buf }
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+    vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
-      -- Keymaps do LSP
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-      vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-      vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-      vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+    -- Exibe mensagens inline ao invés de popups
+    vim.diagnostic.config({ virtual_text = true })
+  end
 
-      -- Exibe mensagens inline ao invés de popups
-      vim.diagnostic.config({ virtual_text = true })
-    end,
+  lspconfig.lua_ls.setup({
+    on_attach = custom_on_attach,
+  })
+  lspconfig.basedpyright.setup({
+    on_attach = custom_on_attach,
+  })
+  lspconfig.ruff.setup({
+    on_attach = custom_on_attach,
   })
 end)

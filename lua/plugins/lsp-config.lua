@@ -1,15 +1,7 @@
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local now_if_args = vim.fn.argc(-1) > 0 and now or later
 
-now_if_args(function()
-  add({ source = "williamboman/mason-lspconfig.nvim", depends = { "williamboman/mason.nvim" } })
-  add({ source = "neovim/nvim-lspconfig" })
-
-  require("mason").setup()
-  require("mason-lspconfig").setup({
-    ensure_installed = { "lua_ls", "basedpyright", "ruff" },
-  })
-
+local function setup_lsp(language, config)
   local lspconfig = require("lspconfig")
 
   local function custom_on_attach(client, bufnr)
@@ -24,38 +16,49 @@ now_if_args(function()
     vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
-    -- Exibe mensagens inline ao invés de popups
     vim.diagnostic.config({ virtual_text = true })
   end
 
-  lspconfig.lua_ls.setup({
+  lspconfig[language].setup({
     on_attach = custom_on_attach,
+    settings = config.settings,
+    init_options = config.init_options,
   })
-  lspconfig.basedpyright.setup({
-    on_attach = custom_on_attach,
-    settings = {
-      basedpyright = {
-        disableOrganizeImports = true,
+end
+
+now_if_args(function()
+  add({ source = "williamboman/mason-lspconfig.nvim", depends = { "williamboman/mason.nvim" } })
+  add({ source = "neovim/nvim-lspconfig" })
+
+  require("mason").setup()
+  require("mason-lspconfig").setup({
+    ensure_installed = { "lua_ls", "basedpyright", "ruff" },
+  })
+
+  local language_configs = {
+    lua_ls = {},
+    basedpyright = {
+      settings = {
+        basedpyright = {
+          disableOrganizeImports = true,
+        },
       },
     },
-    python = {
-      analysis = {
-        -- Ignore all files for analysis to exclusively use Ruff for linting
-        ignore = { "*" },
-      },
-    },
-  })
-  lspconfig.ruff.setup({
-    on_attach = custom_on_attach,
-    init_options = {
+    ruff = {
       settings = {
         configurationPreference = "filesystemFirst",
         lineLength = 80,
-        organizeImports = true
-      }
-    }
-  })
+        organizeImports = true,
+      },
+    },
+  }
 
+  -- Configurar todos os LSPs
+  for language, config in pairs(language_configs) do
+    setup_lsp(language, config)
+  end
+
+  -- Autocomando para desabilitar hover em LSPs específicos
   vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("lsp_attach_disable_ruff_hover", { clear = true }),
     callback = function(args)

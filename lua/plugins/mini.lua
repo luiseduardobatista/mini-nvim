@@ -74,7 +74,7 @@ now(function()
 	require("mini.completion").setup({
 		lsp_completion = {
 			source_func = "omnifunc",
-			auto_setup = true,
+			auto_setup = false,
 			process_items = function(items, base)
 				-- Don't show 'Text' and 'Snippet' suggestions
 				items = vim.tbl_filter(function(x)

@@ -11,12 +11,13 @@ local C = function(cmd)
 	return "<Cmd>" .. cmd .. "<CR>"
 end
 
-map({ "n" }, "-", C("Pick files"), "Files")
+map({ "n" }, "-", C("lua MiniFiles.open()"), "Files")
 map({ "n" }, "fg", C('Pick grep_live'), "Grep Live")
 
 -- ============================= Fuzzy  =============================
 
-map({ "n" }, L("<Space>"), C("Pick files"), "Search files") map({ "n" }, L("gr"), C('Pick lsp scope="references"'), "References (LSP)")
+map({ "n" }, L("<Space>"), C("Pick files"), "Search files")
+map({ "n" }, L("gr"), C('Pick lsp scope="references"'), "References (LSP)")
 map({ "n" }, L("fs"), C('Pick lsp scope="workspace_symbol"'), "Symbols workspace (LSP)")
 map({ "n" }, L("fS"), C('Pick lsp scope="document_symbol"'), "Symbols buffer (LSP)")
 map({ "n" }, L("fv"), C('Pick visit_paths cwd=""'), "Visit paths (all)")

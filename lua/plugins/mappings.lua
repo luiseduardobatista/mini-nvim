@@ -14,6 +14,12 @@ local C = function(cmd)
   return "<Cmd>" .. cmd .. "<CR>"
 end
 
+_G.minifiles_toggle = function(...)
+  if not MiniFiles.close() then
+    MiniFiles.open(...)
+  end
+end
+
 -- ============================= Navigation (Splits) =============================
 nmap_leader("h", "<C-w>h", "Move to left split")
 nmap_leader("j", "<C-w>j", "Move to below split")
@@ -27,7 +33,7 @@ nmap_leader("qk", C("cprev"), "Previous Quickfix")
 nmap_leader("qj", C("cnext"), "Next Quickfix")
 
 -- ============================= File Management =============================
-nmap_leader("-", C("lua MiniFiles.open()"), "Files")
+map("n", "-", C("lua _G.minifiles_toggle()"), "Toggle Explorer")
 nmap_leader("fg", C("Pick grep_live"), "Grep Live")
 
 -- ============================= Fuzzy =============================

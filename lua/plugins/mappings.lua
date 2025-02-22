@@ -32,7 +32,6 @@ nmap_leader("fg", C("Pick grep_live"), "Grep Live")
 
 -- ============================= Fuzzy =============================
 nmap_leader("<Space>", C("Pick files"), "Search files")
--- nmap_leader("gr", C('Pick lsp scope="references"'), "References (LSP)")
 nmap_leader("fs", C('Pick lsp scope="workspace_symbol"'), "Symbols workspace (LSP)")
 nmap_leader("fS", C('Pick lsp scope="document_symbol"'), "Symbols buffer (LSP)")
 nmap_leader("fR", C('Pick visit_paths cwd=""'), "Visit paths (all)")

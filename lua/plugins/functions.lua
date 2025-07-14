@@ -7,3 +7,8 @@ Config.toggle_quickfix = function()
   end
   vim.cmd("copen")
 end
+
+Config.bufdir = function()
+  local path = vim.bo.buftype ~= "nofile" and vim.api.nvim_buf_get_name(0) or nil
+  MiniFiles.open(path, true)
+end

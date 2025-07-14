@@ -1,7 +1,6 @@
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local now_if_args = vim.fn.argc(-1) > 0 and now or later
 
-
 now(function()
   require("mini.statusline").setup()
 end)
@@ -66,8 +65,8 @@ end)
 later(function()
   require("mini.bufremove").setup()
 end)
-later(function()
-  require("mini.extra").setup()
+now(function()
+  require("mini.extra").setup({ delay = { async = 1, busy = 1 } })
 end)
 
 now(function()
@@ -77,12 +76,11 @@ now(function()
       auto_setup = false,
     },
     window = {
-      info = { border = 'double' },
-      signature = { border = 'double' },
+      info = { border = "double" },
+      signature = { border = "double" },
     },
   })
 end)
-
 
 later(function()
   local hipatterns = require("mini.hipatterns")
